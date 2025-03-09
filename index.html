@@ -4,48 +4,382 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mizzcraft - Minecraft Server</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #8a2be2, #4169e1); /* Bisexual lighting: purple to blue */
+            font-family: 'Press Start 2P', cursive; /* Retro Minecraft GUI font */
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6); /* Dark semi-transparent Minecraft GUI vibe */
+            border: 4px solid #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px dashed #fff;
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 36px;
+            text-shadow: 2px 2px #000;
+            color: #ff69b4; /* Hot pink for retro flair */
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #dda0dd; /* Plum purple */
+            text-shadow: 1px 1px #000;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #fff;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 20px;
+            background: #ff00ff; /* Neon magenta */
+            color: #fff;
+            text-decoration: none;
+            border: 2px solid #000;
+            box-shadow: 2px 2px #000;
+            transition: all 0.2s;
+            margin: 10px auto;
+            font-size: 14px;
+            text-align: center;
+            width: 180px;
+            height: 20px;
+            line-height: 20px;
+        }
+
+        .button:hover {
+            background: #00ffff; /* Neon cyan */
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px #000;
+        }
+
+        ol {
+            font-size: 12px;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 10px;
+            padding-top: 10px;
+        }
+
+        /* Flowery Decorations */
+        .flower {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 2-2 4-2 4s-2-2-2-4a2 2 0 0 1 2-2zm6 6a2 2 0 0 1 2 2c0 2-2 4-2 4s-2-2-2-4a2 2 0 0 1 2-2zm-12 0a2 2 0 0 1 2 2c0 2-2 4-2 4s-2-2-2-4a2 2 0 0 1 2-2zm6 10a2 2 0 0 1 2 2c0 2-2 4-2 4s-2-2-2-4a2 2 0 0 1 2-2z" fill="%23ff69b4"/></svg>') no-repeat center;
+            background-size: contain;
+            z-index: 0;
+        }
+
+        .flower1 { top: 10%; left: 10%; animation: float 5s infinite; }
+        .flower2 { top: 60%; right: 15%; animation: float 6s infinite; }
+        .flower3 { bottom: 20%; left: 20%; animation: float 4s infinite; }
+
+        /* Additional styles from inline styles in original HTML */
+        .server-box {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .server-option {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #dda0dd;
+            text-shadow: 1px 1px #000;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .center-text {
+            text-align: center;
+        }
+
+        .info, .discord {
+            text-align: center;
+        }
+
+        .mods {
+            padding: 30px; /* Increased padding for mod section */
+        }
+
+        .mods p, .mods ol, .mods ul, .mods .easy-method p, .mods .easy-method ol {
+            text-align: left;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .easy-method {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 105, 180, 0.2);
+            border: 1px dashed #fff;
+        }
+
+        /* Minecraft decorative elements */
+        .block {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="16" fill="%23795548"/><rect x="0" y="0" width="8" height="8" fill="%238D6E63"/><rect x="8" y="8" width="8" height="8" fill="%238D6E63"/></svg>') no-repeat center;
+            background-size: contain;
+            z-index: 0;
+        }
+
+        .diamond {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="%2300FFFF" stroke="%231E88E5" stroke-width="1"/></svg>') no-repeat center;
+            background-size: contain;
+            z-index: 0;
+        }
+
+        .creeper {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="16" fill="%2352BE80"/><rect x="4" y="4" width="2" height="2" fill="%23000"/><rect x="10" y="4" width="2" height="2" fill="%23000"/><rect x="4" y="8" width="2" height="2" fill="%23000"/><rect x="7" y="8" width="2" height="2" fill="%23000"/><rect x="10" y="8" width="2" height="2" fill="%23000"/><rect x="7" y="10" width="2" height="2" fill="%23000"/></svg>') no-repeat center;
+            background-size: contain;
+            z-index: 0;
+        }
+
+        .flower4 { top: 30%; left: 40%; animation: float 7s infinite; }
+        .flower5 { bottom: 40%; right: 30%; animation: float 4.5s infinite; }
+        .block1 { top: 15%; right: 20%; animation: bob 8s infinite; }
+        .block2 { bottom: 10%; left: 30%; animation: bob 10s infinite; }
+        .diamond1 { top: 40%; right: 5%; animation: spin 10s linear infinite; }
+        .diamond2 { bottom: 30%; left: 5%; animation: spin 8s linear infinite; }
+        .creeper1 { bottom: 15%; right: 40%; animation: wiggle 7s infinite; }
+
+        /* Link styles */
+        a {
+            color: #ff69b4;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        a:hover {
+            color: #00ffff;
+            text-decoration: underline;
+        }
+
+        /* Make both server buttons identical */
+        .server-address, .server-button {
+            display: block;
+            padding: 15px 20px;
+            background: #ff00ff;
+            color: #fff;
+            text-decoration: none;
+            border: 2px solid #000;
+            box-shadow: 2px 2px #000;
+            font-size: 14px;
+            width: 200px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            transition: all 0.2s;
+            margin: 0 auto;
+        }
+
+        .server-address:hover, .server-button:hover {
+            background: #00ffff;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px #000;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Retro early 2000s vibe */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAAXNSR0IArs4c6QAAAB5JREFUCB0BALsJACEMg/8/AJ0eA8fAAczwJRhgAAY8AVoLJRnJAAAAAElFTkSuQmCC') repeat; /* Tiny pixel noise */
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes bob {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(5deg); }
+            66% { transform: translateY(10px) rotate(-5deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px); }
+            75% { transform: translateX(15px); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Mizzcraft</h1>
-            <p>Welcome to the Flowery Realm!</p>
+            <p>Official Minecraft Server of the Mizzcord</p>
         </header>
 
         <section class="info">
             <h2>About Mizzcraft</h2>
             <p>
-                Mizzcraft is a chill Minecraft server where you can build, explore, and vibe in a flowery world! 
-                We’ve got custom biomes, friendly players, and a retro twist. Join us at <strong>mizzcraft.love</strong>!
+                Mizzcraft is a chill vanilla Minecraft server hosted by the Mizzcord, a community centered around the singer, filmaker,
+                and ex-fishtank contestant Mizzy!
             </p>
-            <a href="minecraft://mizzcraft.love" class="button">Launch Minecraft</a>
+            
+            <div class="server-box">
+                <div class="server-option">
+                    <h3>Java Edition</h3>
+                    <span class="server-address">mizzcraft.love</span>
+                </div>
+                <div class="server-option">
+                    <h3>Bedrock Edition</h3>
+                    <a href="minecraft:?addExternalServer=Mizzcraft|mizzcraft.love:60425" class="server-button">Add to Bedrock</a>
+                </div>
+            </div>
         </section>
 
         <section class="discord">
             <h2>Join Our Discord</h2>
-            <p>Chat with the crew and stay updated!</p>
-            <a href="https://discord.gg/mizzcord" class="button">Join Discord</a>
+            <p>Chat with Mizzy fans and stay updated!</p>
+            <a href="http://discord.gg/mizzcord" class="button">Join Discord</a>
         </section>
 
         <section class="mods">
             <h2>Mod Installation Guide</h2>
-            <p>Enhance your experience with these simple mods:</p>
+            <p>Mizzcraft recommends the following mods:</p>
             <ol>
-                <li><strong>OptiFine</strong>: Boosts performance and adds shaders. <a href="https://optifine.net">Download here</a>.</li>
-                <li><strong>Biomes O’Plenty</strong>: More flowers and biomes! <a href="https://www.curseforge.com/minecraft/mc-mods/biomes-o-plenty">Get it here</a>.</li>
+                <li><strong>Java Runtime Environment:</strong> Required to run Minecraft and mods. 
+                    <a href="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=251656_7ed26d28139143f38c58992680c214a5">Download</a>
+                </li>
+                <li><strong>Iris Shaders:</strong> Beautiful lighting effects. (Select the 'Iris + Fabric' option during installation).
+                    <a href="https://github.com/IrisShaders/Iris-Installer/releases/download/3.2.1/Iris-Installer-3.2.1.jar">Download</a>
+                </li>
+                <li><strong>Simple Voice Mod:</strong> Talk with friends in-game with proximity voice.
+                    <a href="https://cdn.modrinth.com/data/9eGKb6K1/versions/DWQCr1uB/voicechat-fabric-1.21.4-2.5.28.jar">Download</a>
+                </li>
             </ol>
-            <p><strong>How to Install:</strong> Download Forge, drop mods in the "mods" folder, and launch!</p>
+            <p><strong>How to Install:</strong></p>
+            <ol>
+                <li>Install <strong>Java</strong>, then <strong>Iris Shaders</strong>, select <strong>Iris + Fabric</strong> as the installation option.</li>
+                <li>Open the <strong>Minecraft Launcher</strong>, browse to <strong>Installations</strong>, and for Fabric Loader click <strong>Open Installation Folder</strong>.
+                    <br><br>
+                    <center>
+                        <button onclick="toggleImage()">Show Example</button>
+                        <br>
+                        <img id="installImage" src="images/install.gif" alt="Installation Guide" style="display: none;">
+                    </center>
+                </li>
+                <li>Drop BSLClassic_v8.4.02.2.zip into the <strong>shaderpacks</strong> folder.</li>
+                <li>Drop voicechat-fabric-1.21.4-2.5.28.jar into the <strong>mods</strong> folder (create the folder if none exists).</li>
+                <li><strong>Important:</strong> Make sure to select and launch Fabric Loader in the Minecraft launcher dropdown menu.</li>
+            </ol>
+            
+            <script>
+            function toggleImage() {
+                var img = document.getElementById("installImage");
+                if (img.style.display === "none") {
+                    img.style.display = "block";
+                } else {
+                    img.style.display = "none";
+                }
+            }
+            </script>
+            
+            <div class="easy-method">
+                <h3 class="center-text">Alternative Easy Installer</h3>
+                <p>Don't want to install mods manually?</p>
+                <ol>
+                    <li>Download and install <a href="https://download.curseforge.com/">CurseForge App</a></li>
+                    <li>Open the app and click "Minecraft"</li>
+                    <li>Search for "Mizzcraft" in the search bar</li>
+                    <li>Click "Install" and wait for the download to complete</li>
+                    <li>Click "Play" and enjoy!</li>
+                </ol>
+            </div>
         </section>
 
         <footer>
-            <p>&copy; 2025 Mizzcraft - Built with Love and Flowers</p>
+            <p>&copy; 2025 Mizzcraft - Built with Love and Mizzery</p>
         </footer>
     </div>
 
+    <!-- Original flowers -->
     <div class="flower flower1"></div>
     <div class="flower flower2"></div>
     <div class="flower flower3"></div>
+    
+    <!-- New flowers -->
+    <div class="flower flower4"></div>
+    <div class="flower flower5"></div>
+    
+    <!-- Minecraft blocks -->
+    <div class="block block1"></div>
+    <div class="block block2"></div>
+    
+    <!-- Diamonds -->
+    <div class="diamond diamond1"></div>
+    <div class="diamond diamond2"></div>
+    
+    <!-- Creeper -->
+    <div class="creeper creeper1"></div>
 </body>
 </html>
