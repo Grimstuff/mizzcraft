@@ -114,7 +114,7 @@
             justify-content: center;
             flex-wrap: wrap;
             gap: 30px;
-            margin: 30px 0;
+            margin: 0px 0;
         }
 
         .server-option {
@@ -140,7 +140,7 @@
             text-align: center;
         }
 
-        .info, .discord {
+        .info, .discord, .server-map {
             text-align: center;
         }
 
@@ -211,7 +211,7 @@
         }
 
         /* Make both server buttons identical */
-        .server-address, .server-button {
+        .server-address, .server-button, .map-button {
             display: block;
             padding: 15px 20px;
             background: #ff00ff;
@@ -225,10 +225,10 @@
             line-height: 20px;
             text-align: center;
             transition: all 0.2s;
-            margin: 0 auto;
+            margin: 10px auto;
         }
 
-        .server-address:hover, .server-button:hover {
+        .server-address:hover, .server-button:hover, .map-button:hover {
             background: #00ffff;
             transform: translate(-2px, -2px);
             box-shadow: 4px 4px #000;
@@ -304,37 +304,42 @@
             <a href="http://discord.gg/mizzcord" class="button">Join Discord</a>
         </section>
 
+        <section class="server-map">
+            <h2>Server Map</h2>
+            <p>Explore our world and discover builds!</p>
+            <a href="http://map.mizzcraft.love" class="map-button">Server Map</a>
+        </section>
+
         <section class="mods">
             <h2>Mod Installation Guide</h2>
-            <p>Mizzcraft recommends the following mods:</p>
+            <p>Download these:</p>
             <ol>
                 <li>
                     <a href="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=251656_7ed26d28139143f38c58992680c214a5"><strong>Java Runtime Environment</strong></a>:
-                    Required to run Minecraft and mods. 
+                    Required to run installer. 
                 </li>
                 <li>
                     <a href="https://github.com/IrisShaders/Iris-Installer/releases/download/3.2.1/Iris-Installer-3.2.1.jar"><strong>Iris+Fabric</strong></a>:
                     Shader loader and mod framework. 
-                    (Select the 'Iris + Fabric' option during installation).
                 </li>
                 <li>
                     <a href="https://github.com/IrisShaders/Iris-Installer/releases/download/3.2.1/Iris-Installer-3.2.1.jar"><strong>BSL Classic</strong></a>:
-                    Beautiful vanilla-style shader. (OPTIONAL - Requires beefy PC).
+                    Beautiful vanilla-style shaders. (OPTIONAL - Requires beefy PC).
                 </li>                
                 <li>
                     <a href="https://cdn.modrinth.com/data/9eGKb6K1/versions/DWQCr1uB/voicechat-fabric-1.21.4-2.5.28.jar"><strong>Simple Voice Mod</strong></a>:
-                    Talk with friends in-game with proximity voice.
+                    Speak in-game with proximity voice.
                 </li>
             </ol>
             <p><strong>How to Install:</strong></p>
             <ol>
-                <li>Install <strong>Java</strong>, then <strong>Iris</strong>, select <strong>Iris+Fabric</strong> as the installation option.</li>
+                <li>Install <strong>Java</strong>, then <strong>Iris</strong> (select <strong>Iris+Fabric</strong> as the installation option).</li>
                 <li>Open the <strong>Minecraft Launcher</strong>, browse to <strong>Installations</strong>, and for Fabric Loader click <strong>Open Installation Folder</strong>.
                     <br><br>
                     <center>
                         <button onclick="toggleImage()">Show Example</button>
                         <br>
-                        <img id="installImage" src="images/install.gif" alt="Installation Guide" style="display: none;">
+                        <img id="installImage" src="/api/placeholder/400/300" alt="Installation Guide" style="display: none;">
                     </center>
                 </li>
                 <li>Drop BSLClassic_v8.4.02.2.zip into the <strong>shaderpacks</strong> folder.</li>
@@ -355,12 +360,12 @@
             
             <div class="easy-method">
                 <h3 class="center-text">Alternative Easy Installer</h3>
-                <p>Don't want to install mods manually?</p>
+                <p>New to MC? Don't want to install mods manually?</p>
                 <ol>
                     <li>Download and install <a href="https://download.curseforge.com/">CurseForge App</a></li>
                     <li>Open the app and click "Minecraft" as your active game</li>
                     <li>Click "Import"</li>
-                    <li>Download our modpack .zip file here: <a href="files/mizzcraft.zip" class="download-link">Mizzcraft Modpack</a></li>
+                    <li>Download our modpack .zip file here: <a href="#">Mizzcraft Modpack</a></li>
                     <li>Import into CurseForge and enjoy!</li>
                 </ol>
             </div>
