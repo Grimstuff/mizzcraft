@@ -319,29 +319,30 @@
 
         <section class="mods">
             <h2>Mod Installation Guide</h2>
+            <p class="center-text">Server is on <strong>Minecraft 26.2</strong> (Fabric). Client must match.</p>
             <p>Download these:</p>
             <ol>
                 <li>
                     <a href="https://javadl.oracle.com/webapps/download/AutoDL?BundleId=251656_7ed26d28139143f38c58992680c214a5"><strong>Java Runtime Environment</strong></a>:
-                    Required to run installer. 
+                    Required to run the Iris installer (Java 21+ recommended).
                 </li>
                 <li>
-                    <a href="https://github.com/IrisShaders/Iris-Installer/releases/download/3.2.1/Iris-Installer-3.2.1.jar"><strong>Iris+Fabric</strong></a>:
-                    Shader loader and mod framework. 
+                    <a href="https://github.com/IrisShaders/Iris-Installer/releases/download/3.3.0/Iris-Installer-3.3.0.jar"><strong>Iris Installer 3.3.0</strong></a>:
+                    Installs Fabric + Iris + Sodium for <strong>26.2</strong> (Iris 1.11.2, Sodium 0.9.1).
                 </li>
                 <li>
-                    <a href="https://www.curseforge.com/minecraft/shaders/bsl-shaders-classic/download/6251108"><strong>BSL Classic</strong></a>:
-                    Beautiful vanilla-style shaders. (OPTIONAL - Requires beefy PC).
-                </li>                
+                    <a href="https://cdn.modrinth.com/data/Q1vvjJYV/versions/jRn8y2VF/BSL_v10.0.zip"><strong>BSL Classic v10.0</strong></a>:
+                    Beautiful vanilla-style shaders. (OPTIONAL — needs a decent GPU.)
+                </li>
                 <li>
-                    <a href="https://cdn.modrinth.com/data/9eGKb6K1/versions/OzXC5Efi/voicechat-fabric-1.21.5-2.5.29.jar"><strong>Simple Voice Mod</strong></a>:
-                    Speak in-game with proximity voice.
+                    <a href="https://cdn.modrinth.com/data/9eGKb6K1/versions/3SOh5iiX/voicechat-fabric-2.6.21%2B26.2.jar"><strong>Simple Voice Chat 2.6.21+26.2</strong></a>:
+                    Proximity voice (same version the server runs).
                 </li>
             </ol>
             <p><strong>How to Install:</strong></p>
             <ol>
-                <li>Install <strong>Java</strong>, then <strong>Iris</strong> (select <strong>1.21.5</strong> and <strong>Iris+Fabric</strong> as the installation option).</li>
-                <li>Open the <strong>Minecraft Launcher</strong>, browse to <strong>Installations</strong>, and for Fabric Loader click <strong>Open Installation Folder</strong>.
+                <li>Install <strong>Java</strong>, then run the <strong>Iris Installer</strong>. Choose Minecraft <strong>26.2</strong> and the <strong>Iris + Fabric</strong> option (not Quilt).</li>
+                <li>Open the <strong>Minecraft Launcher</strong> → <strong>Installations</strong> → for the new Fabric/Iris profile click <strong>Folder</strong> / <strong>Open Installation Folder</strong>.
                     <br><br>
                     <center>
                         <button onclick="toggleImage()">Show Example</button>
@@ -349,10 +350,18 @@
                         <img id="installImage" src="images/install.gif" alt="Installation Guide" style="display: none;">
                     </center>
                 </li>
-                <li>Drop BSLClassic_v8.4.02.2.zip into the <strong>shaderpacks</strong> folder.</li>
-                <li>Drop voicechat-fabric-1.21.5-2.5.29.jar into the <strong>mods</strong> folder (create the folder if none exists).</li>
-                <li><strong>Important:</strong> Make sure to select and launch Fabric Loader in the Minecraft launcher dropdown menu when playing.</li>
+                <li>Drop <strong>BSL_v10.0.zip</strong> into the <strong>shaderpacks</strong> folder (create the folder if needed).</li>
+                <li>Drop <strong>voicechat-fabric-2.6.21+26.2.jar</strong> into the <strong>mods</strong> folder (alongside Iris/Sodium/Fabric API).</li>
+                <li><strong>Important:</strong> Launch with the <strong>Fabric / Iris 26.2</strong> installation in the launcher dropdown — not vanilla.</li>
+                <li>Join address: <strong>mizzcord.com</strong></li>
             </ol>
+
+            <p class="center-text" style="font-size:11px;opacity:0.9;margin-top:1rem">
+                Manual mod versions (if not using the installer): 
+                <a href="https://cdn.modrinth.com/data/P7dR8mSH/versions/3gT0I5vt/fabric-api-0.156.0%2B26.2.jar">Fabric API 0.156.0+26.2</a> ·
+                <a href="https://cdn.modrinth.com/data/YL57xq9U/versions/oaD6KQls/iris-fabric-1.11.2%2Bmc26.2.jar">Iris 1.11.2</a> ·
+                <a href="https://cdn.modrinth.com/data/AANobbMI/versions/2Yom1N68/sodium-fabric-0.9.1%2Bmc26.2.jar">Sodium 0.9.1</a>
+            </p>
             
             <script>
             function toggleImage() {
@@ -373,9 +382,9 @@
                     <a href="https://download.overwolf.com/install/Download?ExtensionId=cfiahnpaolfnlgaihhmobmnjdafknjnjdpdabpcm&utm_term=eyJkb21haW4iOiJjZi13ZWIifQ%3D%3D">CurseForge App</a>
                     </li>
                     <li>Open the app and click "Minecraft" as your active game.</li>
-                    <li>On the top search bar, search Mizzcraft, and click install</li>
-                    <li>Click play! The server address will be pre-loaded into your list.</li>
-                    <li>(shaders are disabled by default, enable them in video settings)</li>
+                    <li>Search <strong>Mizzcraft</strong>, install the pack built for <strong>26.2</strong> (not the old 1.21.5 pack).</li>
+                    <li>Click play! Server list should include <strong>mizzcord.com</strong>.</li>
+                    <li>(Shaders are off by default — enable BSL in video settings / shader packs if you want them.)</li>
                 </ol>
             </div>
         </section>
