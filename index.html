@@ -9,21 +9,22 @@
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #8a2be2, #4169e1); /* Bisexual lighting: purple to blue */
+            background: #0a0a1a;
             font-family: 'Press Start 2P', cursive; /* Retro Minecraft GUI font */
             color: #fff;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
         .container {
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.6); /* Dark semi-transparent Minecraft GUI vibe */
+            background: rgba(0, 0, 0, 0.72); /* Dark semi-transparent Minecraft GUI vibe */
             border: 4px solid #fff;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         header {
@@ -94,20 +95,6 @@
             padding-top: 10px;
         }
 
-        /* Flowery Decorations */
-        .flower {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 2-2 4-2 4s-2-2-2-4a2 2 0 0 1 2-2zm6 6a2 2 0 0 1 2 2c0 2-2 4-2 4s-2-2-2-4a2 2 0 0 1 2-2zm-12 0a2 2 0 0 1 2 2c0 2-2 4-2 4s-2-2-2-4a2 2 0 0 1 2-2zm6 10a2 2 0 0 1 2 2c0 2-2 4-2 4s-2-2-2-4a2 2 0 0 1 2-2z" fill="%23ff69b4"/></svg>') no-repeat center;
-            background-size: contain;
-            z-index: 0;
-        }
-
-        .flower1 { top: 10%; left: 10%; animation: float 5s infinite; }
-        .flower2 { top: 60%; right: 15%; animation: float 6s infinite; }
-        .flower3 { bottom: 20%; left: 20%; animation: float 4s infinite; }
-
         /* Additional styles from inline styles in original HTML */
         .server-box {
             display: flex;
@@ -162,42 +149,6 @@
             border: 1px dashed #fff;
         }
 
-        /* Minecraft decorative elements */
-        .block {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="16" fill="%23795548"/><rect x="0" y="0" width="8" height="8" fill="%238D6E63"/><rect x="8" y="8" width="8" height="8" fill="%238D6E63"/></svg>') no-repeat center;
-            background-size: contain;
-            z-index: 0;
-        }
-
-        .diamond {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="%2300FFFF" stroke="%231E88E5" stroke-width="1"/></svg>') no-repeat center;
-            background-size: contain;
-            z-index: 0;
-        }
-
-        .creeper {
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="0" y="0" width="16" height="16" fill="%2352BE80"/><rect x="4" y="4" width="2" height="2" fill="%23000"/><rect x="10" y="4" width="2" height="2" fill="%23000"/><rect x="4" y="8" width="2" height="2" fill="%23000"/><rect x="7" y="8" width="2" height="2" fill="%23000"/><rect x="10" y="8" width="2" height="2" fill="%23000"/><rect x="7" y="10" width="2" height="2" fill="%23000"/></svg>') no-repeat center;
-            background-size: contain;
-            z-index: 0;
-        }
-
-        .flower4 { top: 30%; left: 40%; animation: float 7s infinite; }
-        .flower5 { bottom: 40%; right: 30%; animation: float 4.5s infinite; }
-        .block1 { top: 15%; right: 20%; animation: bob 8s infinite; }
-        .block2 { bottom: 10%; left: 30%; animation: bob 10s infinite; }
-        .diamond1 { top: 40%; right: 5%; animation: spin 10s linear infinite; }
-        .diamond2 { bottom: 30%; left: 5%; animation: spin 8s linear infinite; }
-        .creeper1 { bottom: 15%; right: 40%; animation: wiggle 7s infinite; }
-
         /* Link styles */
         a {
             color: #ff69b4;
@@ -236,43 +187,329 @@
             text-decoration: none;
         }
 
-        /* Retro early 2000s vibe */
-        body::before {
-            content: "";
+        /* ========== Minecraft day / night sky (pure CSS) ========== */
+        .sky-scene {
             position: fixed;
-            top: 0;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        /* Layered skies crossfade through a full day */
+        .sky-layer {
+            position: absolute;
+            inset: 0;
+            animation: sky-cycle 90s linear infinite;
+        }
+
+        .sky-day {
+            background: linear-gradient(to bottom, #5dade2 0%, #85c1e9 45%, #aed6f1 70%, #d6eaf8 100%);
+            animation-name: sky-day;
+        }
+
+        .sky-sunset {
+            /* Keeps a bit of the old purple/pink vibe at dusk/dawn */
+            background: linear-gradient(to bottom, #2c1654 0%, #6b2d8b 25%, #c44b8a 50%, #f39c6b 75%, #f7c59f 100%);
+            animation-name: sky-sunset;
+        }
+
+        .sky-night {
+            background: linear-gradient(to bottom, #050510 0%, #0d1b3e 40%, #1a2744 70%, #243447 100%);
+            animation-name: sky-night;
+        }
+
+        /* Orbit 0° = noon (sun high), 25% = dusk, 50% = midnight, 75% = dawn */
+        @keyframes sky-day {
+            0%, 100% { opacity: 1; }
+            18% { opacity: 1; }
+            28% { opacity: 0; }
+            72% { opacity: 0; }
+            82% { opacity: 1; }
+        }
+
+        @keyframes sky-sunset {
+            0%, 100% { opacity: 0; }
+            18% { opacity: 0; }
+            25% { opacity: 1; }
+            32% { opacity: 0; }
+            68% { opacity: 0; }
+            75% { opacity: 1; }
+            82% { opacity: 0; }
+        }
+
+        @keyframes sky-night {
+            0%, 100% { opacity: 0; }
+            28% { opacity: 0; }
+            35% { opacity: 1; }
+            65% { opacity: 1; }
+            75% { opacity: 0; }
+        }
+
+        /* Stars — visible at night */
+        .stars {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 8% 12%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 18% 28%, #fff 50%, transparent 50%),
+                radial-gradient(1.5px 1.5px at 27% 8%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 35% 22%, #ffe9a8 50%, transparent 50%),
+                radial-gradient(1px 1px at 48% 15%, #fff 50%, transparent 50%),
+                radial-gradient(1.5px 1.5px at 62% 30%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 71% 10%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 79% 25%, #ffe9a8 50%, transparent 50%),
+                radial-gradient(1px 1px at 88% 14%, #fff 50%, transparent 50%),
+                radial-gradient(1.5px 1.5px at 12% 45%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 42% 38%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 55% 48%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 93% 40%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 22% 55%, #ffe9a8 50%, transparent 50%),
+                radial-gradient(1.5px 1.5px at 67% 52%, #fff 50%, transparent 50%);
+            animation: stars-cycle 90s linear infinite;
+            image-rendering: pixelated;
+        }
+
+        @keyframes stars-cycle {
+            0%, 100% { opacity: 0; }
+            30% { opacity: 0; }
+            38% { opacity: 1; }
+            62% { opacity: 1; }
+            72% { opacity: 0; }
+        }
+
+        /* Pivot at horizon center; sun/moon ride opposite ends of the radius */
+        .celestial-orbit {
+            position: absolute;
+            left: 50%;
+            bottom: 22%;
+            width: 0;
+            height: 0;
+            animation: orbit-spin 90s linear infinite;
+        }
+
+        .sun,
+        .moon {
+            position: absolute;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAAXNSR0IArs4c6QAAAB5JREFUCB0BALsJACEMg/8/AJ0eA8fAAczwJRhgAAY8AVoLJRnJAAAAAElFTkSuQmCC') repeat; /* Tiny pixel noise */
-            opacity: 0.1;
-            z-index: -1;
+            top: 0;
+            image-rendering: pixelated;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        .sun {
+            /* Radius of the arc */
+            transform: translate(-50%, -50%) translateY(calc(-1 * min(42vh, 380px)));
+            width: 56px;
+            height: 56px;
+            background:
+                linear-gradient(135deg, #fff59d 0%, #ffeb3b 40%, #fbc02d 100%);
+            box-shadow:
+                0 0 0 4px #f9a825,
+                0 0 40px 12px rgba(255, 220, 80, 0.55),
+                0 0 80px 24px rgba(255, 160, 40, 0.25);
+            /* Squircle-ish pixel sun */
+            border-radius: 8px;
+            clip-path: polygon(
+                20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%
+            );
         }
 
-        @keyframes bob {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            33% { transform: translateY(-15px) rotate(5deg); }
-            66% { transform: translateY(10px) rotate(-5deg); }
+        .moon {
+            transform: translate(-50%, -50%) translateY(min(42vh, 380px));
+            width: 44px;
+            height: 44px;
+            background: #e8eef5;
+            border-radius: 6px;
+            box-shadow:
+                0 0 0 3px #b0bec5,
+                0 0 28px 8px rgba(180, 200, 255, 0.35);
+            clip-path: polygon(
+                20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%
+            );
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Craters */
+        .moon::before,
+        .moon::after {
+            content: "";
+            position: absolute;
+            background: #c5d0db;
+            border-radius: 2px;
+        }
+        .moon::before {
+            width: 10px;
+            height: 10px;
+            top: 10px;
+            left: 8px;
+        }
+        .moon::after {
+            width: 7px;
+            height: 7px;
+            top: 22px;
+            left: 24px;
         }
 
-        @keyframes wiggle {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-15px); }
-            75% { transform: translateX(15px); }
+        @keyframes orbit-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Soft glow under sun at day (optional light wash) */
+        .sun-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 35%, rgba(255, 240, 180, 0.35), transparent 60%);
+            animation: sun-glow 90s linear infinite;
+        }
+
+        @keyframes sun-glow {
+            0%, 100% { opacity: 0.7; }
+            22% { opacity: 0.55; }
+            32% { opacity: 0.15; }
+            40% { opacity: 0; }
+            70% { opacity: 0; }
+            80% { opacity: 0.55; }
+        }
+
+        /* Blocky Minecraft horizon */
+        .horizon {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 26%;
+            min-height: 140px;
+            z-index: 1;
+        }
+
+        .horizon-silhouette {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 18%;
+            height: 48px;
+            background-repeat: repeat-x;
+            background-size: 48px 48px;
+            image-rendering: pixelated;
+            /* Distant hill / tree silhouettes as CSS pattern */
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='48' shape-rendering='crispEdges'><rect x='0' y='28' width='96' height='20' fill='%232d5a27'/><rect x='8' y='16' width='8' height='12' fill='%233d6b2e'/><rect x='4' y='12' width='16' height='8' fill='%233d6b2e'/><rect x='40' y='20' width='12' height='8' fill='%232d5a27'/><rect x='68' y='8' width='6' height='20' fill='%235D4037'/><rect x='62' y='2' width='18' height='14' fill='%232e7d32'/><rect x='66' y='0' width='10' height='8' fill='%23388e3c'/></svg>");
+            opacity: 0.95;
+            filter: brightness(0.85);
+            animation: horizon-tint 90s linear infinite;
+        }
+
+        @keyframes horizon-tint {
+            0%, 100% { filter: brightness(1.05) saturate(1.05); }
+            22% { filter: brightness(0.85) sepia(0.25) hue-rotate(-10deg); }
+            30% { filter: brightness(0.45) saturate(0.7); }
+            50% { filter: brightness(0.3) saturate(0.5); }
+            72% { filter: brightness(0.55) sepia(0.35) hue-rotate(-20deg); }
+            82% { filter: brightness(1) saturate(1.1); }
+        }
+
+        .ground {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 22%;
+            min-height: 120px;
+            image-rendering: pixelated;
+            /* Grass top strip + dirt body */
+            background:
+                linear-gradient(
+                    to bottom,
+                    #5d9c3f 0px,
+                    #5d9c3f 10px,
+                    #3e7a28 10px,
+                    #3e7a28 18px,
+                    #8b5a2b 18px,
+                    #6d4423 40%,
+                    #5a381c 100%
+                );
+            box-shadow: inset 0 4px 0 #7ec850;
+        }
+
+        /* Pixel grass tufts along the surface */
+        .ground::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -8px;
+            height: 12px;
+            background-image: repeating-linear-gradient(
+                90deg,
+                #5d9c3f 0 10px,
+                #4a8a30 10px 14px,
+                #6aaf45 14px 22px,
+                #3e7a28 22px 26px,
+                #5d9c3f 26px 36px
+            );
+            image-rendering: pixelated;
+        }
+
+        /* Dirt “block” seams */
+        .ground::after {
+            content: "";
+            position: absolute;
+            inset: 18px 0 0 0;
+            background-image:
+                linear-gradient(to right, transparent 0, transparent calc(32px - 1px), rgba(0,0,0,0.12) calc(32px - 1px), rgba(0,0,0,0.12) 32px),
+                linear-gradient(to bottom, transparent 0, transparent calc(32px - 1px), rgba(0,0,0,0.1) calc(32px - 1px), rgba(0,0,0,0.1) 32px);
+            background-size: 32px 32px;
+            opacity: 0.9;
+        }
+
+        /* Light vignette so content stays readable */
+        .sky-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 60% at 50% 40%, transparent 30%, rgba(0, 0, 0, 0.25) 100%);
+            z-index: 2;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .sky-layer,
+            .stars,
+            .celestial-orbit,
+            .sun-glow,
+            .horizon-silhouette {
+                animation: none !important;
+            }
+            .sky-day { opacity: 1; }
+            .sky-sunset,
+            .sky-night,
+            .stars { opacity: 0; }
+            .celestial-orbit { transform: rotate(-25deg); } /* mid-morning freeze */
+        }
+
+        @media (max-width: 600px) {
+            .sun { width: 40px; height: 40px; }
+            .moon { width: 32px; height: 32px; }
+            .horizon { height: 30%; }
         }
     </style>
 </head>
 <body>
+    <!-- Fixed day/night background (decorative) -->
+    <div class="sky-scene" aria-hidden="true">
+        <div class="sky-layer sky-night"></div>
+        <div class="sky-layer sky-day"></div>
+        <div class="sky-layer sky-sunset"></div>
+        <div class="stars"></div>
+        <div class="sun-glow"></div>
+        <div class="celestial-orbit">
+            <div class="sun"></div>
+            <div class="moon"></div>
+        </div>
+        <div class="horizon">
+            <div class="horizon-silhouette"></div>
+            <div class="ground"></div>
+        </div>
+        <div class="sky-vignette"></div>
+    </div>
+
     <div class="container">
         <header>
             <h1>Mizzcraft</h1>
@@ -386,25 +623,5 @@
             <p>&copy; 2026 Mizzcraft - Built with Love and Mizzery</p>
         </footer>
     </div>
-
-    <!-- Original flowers -->
-    <div class="flower flower1"></div>
-    <div class="flower flower2"></div>
-    <div class="flower flower3"></div>
-    
-    <!-- New flowers -->
-    <div class="flower flower4"></div>
-    <div class="flower flower5"></div>
-    
-    <!-- Minecraft blocks -->
-    <div class="block block1"></div>
-    <div class="block block2"></div>
-    
-    <!-- Diamonds -->
-    <div class="diamond diamond1"></div>
-    <div class="diamond diamond2"></div>
-    
-    <!-- Creeper -->
-    <div class="creeper creeper1"></div>
 </body>
 </html>
