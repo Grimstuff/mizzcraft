@@ -188,7 +188,9 @@
         }
 
         /* ========== Minecraft day / night sky (pure CSS) ========== */
+        /* Cycle ~100s; morning + sunset dominate; short true day/night */
         .sky-scene {
+            --cycle: 100s;
             position: fixed;
             inset: 0;
             z-index: 0;
@@ -196,298 +198,428 @@
             pointer-events: none;
         }
 
-        /* Layered skies crossfade through a full day */
         .sky-layer {
             position: absolute;
             inset: 0;
-            animation: sky-cycle 90s linear infinite;
         }
 
+        /* Soft purple “day” (never pure blue) */
         .sky-day {
-            background: linear-gradient(to bottom, #5dade2 0%, #85c1e9 45%, #aed6f1 70%, #d6eaf8 100%);
-            animation-name: sky-day;
+            background: linear-gradient(
+                to bottom,
+                #7b6bb8 0%,
+                #8fa0d4 35%,
+                #b8a0d8 65%,
+                #d4b8e8 100%
+            );
+            animation: sky-day var(--cycle) linear infinite;
         }
 
+        /* Long dawn / dusk — pinks, magentas, violets */
         .sky-sunset {
-            /* Keeps a bit of the old purple/pink vibe at dusk/dawn */
-            background: linear-gradient(to bottom, #2c1654 0%, #6b2d8b 25%, #c44b8a 50%, #f39c6b 75%, #f7c59f 100%);
-            animation-name: sky-sunset;
+            background: linear-gradient(
+                to bottom,
+                #1a0a2e 0%,
+                #4a1a6b 18%,
+                #9b3d8f 40%,
+                #e86a9a 58%,
+                #f5a06a 78%,
+                #f8c9a0 100%
+            );
+            animation: sky-sunset var(--cycle) linear infinite;
         }
 
+        /* Purple night */
         .sky-night {
-            background: linear-gradient(to bottom, #050510 0%, #0d1b3e 40%, #1a2744 70%, #243447 100%);
-            animation-name: sky-night;
+            background: linear-gradient(
+                to bottom,
+                #06030f 0%,
+                #12082a 35%,
+                #1a1040 65%,
+                #241848 100%
+            );
+            animation: sky-night var(--cycle) linear infinite;
         }
 
-        /* Orbit 0° = noon (sun high), 25% = dusk, 50% = midnight, 75% = dawn */
+        /*
+         * Timeline (sun left→right 0–50%, moon left→right 50–100%):
+         * 0–18% long morning  | 18–28% brief day | 28–50% long sunset
+         * 50–58% early night | 58–88% night     | 88–100% pre-dawn bleed
+         */
         @keyframes sky-day {
-            0%, 100% { opacity: 1; }
+            0%, 100% { opacity: 0; }
+            12% { opacity: 0.35; }
             18% { opacity: 1; }
-            28% { opacity: 0; }
-            72% { opacity: 0; }
-            82% { opacity: 1; }
+            28% { opacity: 0.85; }
+            36% { opacity: 0; }
+            90% { opacity: 0; }
         }
 
         @keyframes sky-sunset {
-            0%, 100% { opacity: 0; }
-            18% { opacity: 0; }
-            25% { opacity: 1; }
-            32% { opacity: 0; }
-            68% { opacity: 0; }
-            75% { opacity: 1; }
-            82% { opacity: 0; }
+            0% { opacity: 1; }          /* morning dominates start */
+            14% { opacity: 0.55; }
+            20% { opacity: 0.15; }
+            28% { opacity: 0.35; }
+            36% { opacity: 1; }        /* long sunset */
+            48% { opacity: 1; }
+            54% { opacity: 0.2; }
+            60% { opacity: 0; }
+            88% { opacity: 0; }
+            94% { opacity: 0.7; }      /* pre-dawn purple */
+            100% { opacity: 1; }
         }
 
         @keyframes sky-night {
             0%, 100% { opacity: 0; }
-            28% { opacity: 0; }
-            35% { opacity: 1; }
-            65% { opacity: 1; }
-            75% { opacity: 0; }
+            45% { opacity: 0; }
+            52% { opacity: 0.55; }
+            58% { opacity: 1; }
+            86% { opacity: 1; }
+            94% { opacity: 0.25; }
         }
 
-        /* Stars — visible at night */
         .stars {
             position: absolute;
             inset: 0;
             background-image:
-                radial-gradient(1px 1px at 8% 12%, #fff 50%, transparent 50%),
-                radial-gradient(1px 1px at 18% 28%, #fff 50%, transparent 50%),
-                radial-gradient(1.5px 1.5px at 27% 8%, #fff 50%, transparent 50%),
-                radial-gradient(1px 1px at 35% 22%, #ffe9a8 50%, transparent 50%),
-                radial-gradient(1px 1px at 48% 15%, #fff 50%, transparent 50%),
-                radial-gradient(1.5px 1.5px at 62% 30%, #fff 50%, transparent 50%),
-                radial-gradient(1px 1px at 71% 10%, #fff 50%, transparent 50%),
-                radial-gradient(1px 1px at 79% 25%, #ffe9a8 50%, transparent 50%),
-                radial-gradient(1px 1px at 88% 14%, #fff 50%, transparent 50%),
-                radial-gradient(1.5px 1.5px at 12% 45%, #fff 50%, transparent 50%),
-                radial-gradient(1px 1px at 42% 38%, #fff 50%, transparent 50%),
-                radial-gradient(1px 1px at 55% 48%, #fff 50%, transparent 50%),
-                radial-gradient(1px 1px at 93% 40%, #fff 50%, transparent 50%),
-                radial-gradient(1px 1px at 22% 55%, #ffe9a8 50%, transparent 50%),
-                radial-gradient(1.5px 1.5px at 67% 52%, #fff 50%, transparent 50%);
-            animation: stars-cycle 90s linear infinite;
+                radial-gradient(1.5px 1.5px at 6% 10%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 14% 24%, #e8d0ff 50%, transparent 50%),
+                radial-gradient(2px 2px at 22% 8%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 31% 20%, #ffd6f0 50%, transparent 50%),
+                radial-gradient(1px 1px at 40% 12%, #fff 50%, transparent 50%),
+                radial-gradient(1.5px 1.5px at 52% 28%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 61% 9%, #e8d0ff 50%, transparent 50%),
+                radial-gradient(2px 2px at 70% 22%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 78% 14%, #ffd6f0 50%, transparent 50%),
+                radial-gradient(1px 1px at 86% 30%, #fff 50%, transparent 50%),
+                radial-gradient(1.5px 1.5px at 93% 11%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 10% 42%, #e8d0ff 50%, transparent 50%),
+                radial-gradient(1px 1px at 48% 40%, #fff 50%, transparent 50%),
+                radial-gradient(2px 2px at 75% 45%, #fff 50%, transparent 50%),
+                radial-gradient(1px 1px at 28% 50%, #ffd6f0 50%, transparent 50%);
+            animation: stars-cycle var(--cycle) linear infinite;
             image-rendering: pixelated;
         }
 
         @keyframes stars-cycle {
             0%, 100% { opacity: 0; }
-            30% { opacity: 0; }
-            38% { opacity: 1; }
-            62% { opacity: 1; }
-            72% { opacity: 0; }
+            48% { opacity: 0; }
+            56% { opacity: 0.85; }
+            84% { opacity: 1; }
+            92% { opacity: 0.2; }
         }
 
-        /* Pivot at horizon center; sun/moon ride opposite ends of the radius */
-        .celestial-orbit {
-            position: absolute;
-            left: 50%;
-            bottom: 22%;
-            width: 0;
-            height: 0;
-            animation: orbit-spin 90s linear infinite;
-        }
-
+        /* Huge sun / moon — full left-to-right arc over the landscape */
         .sun,
         .moon {
             position: absolute;
-            left: 0;
-            top: 0;
+            z-index: 1;
             image-rendering: pixelated;
+            will-change: left, top, opacity;
         }
 
         .sun {
-            /* Radius of the arc */
-            transform: translate(-50%, -50%) translateY(calc(-1 * min(42vh, 380px)));
-            width: 56px;
-            height: 56px;
-            background:
-                linear-gradient(135deg, #fff59d 0%, #ffeb3b 40%, #fbc02d 100%);
+            width: min(22vw, 200px);
+            height: min(22vw, 200px);
+            margin-left: calc(min(22vw, 200px) / -2);
+            margin-top: calc(min(22vw, 200px) / -2);
+            background: linear-gradient(145deg, #fff6c8 0%, #ffe566 35%, #ffb347 70%, #ff8a5c 100%);
             box-shadow:
-                0 0 0 4px #f9a825,
-                0 0 40px 12px rgba(255, 220, 80, 0.55),
-                0 0 80px 24px rgba(255, 160, 40, 0.25);
-            /* Squircle-ish pixel sun */
-            border-radius: 8px;
+                0 0 0 8px rgba(255, 180, 80, 0.55),
+                0 0 60px 30px rgba(255, 140, 180, 0.45),
+                0 0 120px 50px rgba(180, 80, 200, 0.25);
+            border-radius: 12px;
             clip-path: polygon(
-                20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%
+                18% 0%, 82% 0%, 100% 18%, 100% 82%, 82% 100%, 18% 100%, 0% 82%, 0% 18%
             );
+            animation: sun-path var(--cycle) linear infinite;
         }
 
         .moon {
-            transform: translate(-50%, -50%) translateY(min(42vh, 380px));
-            width: 44px;
-            height: 44px;
-            background: #e8eef5;
-            border-radius: 6px;
+            width: min(18vw, 170px);
+            height: min(18vw, 170px);
+            margin-left: calc(min(18vw, 170px) / -2);
+            margin-top: calc(min(18vw, 170px) / -2);
+            background: linear-gradient(145deg, #f0e8ff 0%, #d4c8f0 50%, #b8a8d8 100%);
             box-shadow:
-                0 0 0 3px #b0bec5,
-                0 0 28px 8px rgba(180, 200, 255, 0.35);
+                0 0 0 6px rgba(160, 140, 200, 0.5),
+                0 0 50px 24px rgba(140, 100, 220, 0.35),
+                0 0 100px 40px rgba(80, 40, 140, 0.2);
+            border-radius: 10px;
             clip-path: polygon(
-                20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%
+                18% 0%, 82% 0%, 100% 18%, 100% 82%, 82% 100%, 18% 100%, 0% 82%, 0% 18%
             );
+            animation: moon-path var(--cycle) linear infinite;
         }
 
-        /* Craters */
         .moon::before,
         .moon::after {
             content: "";
             position: absolute;
-            background: #c5d0db;
-            border-radius: 2px;
+            background: rgba(140, 120, 180, 0.45);
+            border-radius: 3px;
         }
         .moon::before {
-            width: 10px;
-            height: 10px;
-            top: 10px;
-            left: 8px;
+            width: 22%;
+            height: 22%;
+            top: 22%;
+            left: 18%;
         }
         .moon::after {
-            width: 7px;
-            height: 7px;
-            top: 22px;
-            left: 24px;
+            width: 14%;
+            height: 14%;
+            top: 48%;
+            left: 52%;
         }
 
-        @keyframes orbit-spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* Left edge → high noon center → right edge (below far horizon line ~38%) */
+        @keyframes sun-path {
+            0%   { left: -12%; top: 52%; opacity: 0; }
+            2%   { opacity: 1; }
+            8%   { left: 8%;  top: 38%; opacity: 1; }   /* low morning */
+            18%  { left: 28%; top: 18%; }
+            25%  { left: 50%; top: 10%; }              /* high brief day */
+            36%  { left: 72%; top: 20%; }
+            46%  { left: 92%; top: 42%; opacity: 1; }  /* long sunset low */
+            50%  { left: 108%; top: 56%; opacity: 0; }
+            50.01%, 100% { left: -12%; top: 52%; opacity: 0; }
         }
 
-        /* Soft glow under sun at day (optional light wash) */
+        @keyframes moon-path {
+            0%, 50% { left: -12%; top: 52%; opacity: 0; }
+            52%  { left: -8%; top: 48%; opacity: 1; }
+            62%  { left: 22%; top: 22%; }
+            72%  { left: 50%; top: 12%; }             /* high night */
+            84%  { left: 78%; top: 24%; }
+            94%  { left: 98%; top: 46%; opacity: 1; }
+            100% { left: 110%; top: 56%; opacity: 0; }
+        }
+
         .sun-glow {
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse 80% 50% at 50% 35%, rgba(255, 240, 180, 0.35), transparent 60%);
-            animation: sun-glow 90s linear infinite;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 90% 55% at 50% 30%, rgba(255, 180, 220, 0.4), transparent 55%),
+                radial-gradient(ellipse 70% 40% at 50% 50%, rgba(160, 100, 220, 0.2), transparent 60%);
+            animation: sun-glow var(--cycle) linear infinite;
         }
 
         @keyframes sun-glow {
-            0%, 100% { opacity: 0.7; }
-            22% { opacity: 0.55; }
-            32% { opacity: 0.15; }
-            40% { opacity: 0; }
+            0%, 100% { opacity: 0.65; }
+            15% { opacity: 0.5; }
+            24% { opacity: 0.75; }
+            32% { opacity: 0.55; }
+            42% { opacity: 0.7; }
+            52% { opacity: 0.1; }
             70% { opacity: 0; }
-            80% { opacity: 0.55; }
+            90% { opacity: 0.2; }
+            96% { opacity: 0.55; }
         }
 
-        /* Blocky Minecraft horizon */
+        /* Perspective landscape receding to vanishing point */
         .horizon {
             position: absolute;
             left: 0;
             right: 0;
             bottom: 0;
-            height: 26%;
-            min-height: 140px;
-            z-index: 1;
+            height: 48%;
+            min-height: 220px;
+            z-index: 2;
+            perspective: 420px;
+            perspective-origin: 50% 0%;
+            transform-style: preserve-3d;
         }
 
-        .horizon-silhouette {
+        .land-world {
+            position: absolute;
+            left: -20%;
+            right: -20%;
+            bottom: 0;
+            height: 100%;
+            transform-origin: 50% 100%;
+            transform: rotateX(52deg);
+            animation: land-light var(--cycle) linear infinite;
+        }
+
+        /* Far haze / vanishing strip at top of ground plane */
+        .land-fade {
             position: absolute;
             left: 0;
             right: 0;
-            bottom: 18%;
-            height: 48px;
-            background-repeat: repeat-x;
-            background-size: 48px 48px;
+            top: 0;
+            height: 28%;
+            background: linear-gradient(
+                to bottom,
+                rgba(90, 50, 120, 0.55) 0%,
+                transparent 100%
+            );
+            z-index: 3;
+            pointer-events: none;
+            animation: land-haze var(--cycle) linear infinite;
+        }
+
+        .land-mid {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 8%;
+            height: 42%;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    #4a7a38 0 28px,
+                    #3d6b2e 28px 56px,
+                    #558a40 56px 84px,
+                    #3a6230 84px 112px
+                );
             image-rendering: pixelated;
-            /* Distant hill / tree silhouettes as CSS pattern */
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='48' shape-rendering='crispEdges'><rect x='0' y='28' width='96' height='20' fill='%232d5a27'/><rect x='8' y='16' width='8' height='12' fill='%233d6b2e'/><rect x='4' y='12' width='16' height='8' fill='%233d6b2e'/><rect x='40' y='20' width='12' height='8' fill='%232d5a27'/><rect x='68' y='8' width='6' height='20' fill='%235D4037'/><rect x='62' y='2' width='18' height='14' fill='%232e7d32'/><rect x='66' y='0' width='10' height='8' fill='%23388e3c'/></svg>");
             opacity: 0.95;
-            filter: brightness(0.85);
-            animation: horizon-tint 90s linear infinite;
         }
 
-        @keyframes horizon-tint {
-            0%, 100% { filter: brightness(1.05) saturate(1.05); }
-            22% { filter: brightness(0.85) sepia(0.25) hue-rotate(-10deg); }
-            30% { filter: brightness(0.45) saturate(0.7); }
-            50% { filter: brightness(0.3) saturate(0.5); }
-            72% { filter: brightness(0.55) sepia(0.35) hue-rotate(-20deg); }
-            82% { filter: brightness(1) saturate(1.1); }
+        /* Distant block trees / hills (smaller scale near vanish) */
+        .land-far-sil {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 36%;
+            background-repeat: repeat-x;
+            background-size: 120px 100%;
+            background-position: center bottom;
+            image-rendering: pixelated;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='64' shape-rendering='crispEdges'><rect x='0' y='40' width='120' height='24' fill='%233a6230'/><rect x='10' y='28' width='20' height='16' fill='%234a7a38'/><rect x='50' y='20' width='8' height='24' fill='%235D4037'/><rect x='42' y='8' width='24' height='20' fill='%232e6b32'/><rect x='88' y='24' width='16' height='20' fill='%233d6b2e'/></svg>");
+            opacity: 0.9;
         }
 
-        .ground {
+        .land-near {
             position: absolute;
             left: 0;
             right: 0;
             bottom: 0;
-            height: 22%;
-            min-height: 120px;
+            height: 58%;
             image-rendering: pixelated;
-            /* Grass top strip + dirt body */
             background:
                 linear-gradient(
                     to bottom,
-                    #5d9c3f 0px,
-                    #5d9c3f 10px,
-                    #3e7a28 10px,
-                    #3e7a28 18px,
-                    #8b5a2b 18px,
-                    #6d4423 40%,
-                    #5a381c 100%
+                    #5a9c42 0px,
+                    #5a9c42 14px,
+                    #3e7a28 14px,
+                    #3e7a28 26px,
+                    #8b5a2b 26px,
+                    #6d4423 55%,
+                    #4a2e16 100%
                 );
-            box-shadow: inset 0 4px 0 #7ec850;
+            box-shadow: inset 0 6px 0 #7ec850;
         }
 
-        /* Pixel grass tufts along the surface */
-        .ground::before {
+        .land-near::before {
             content: "";
             position: absolute;
             left: 0;
             right: 0;
-            top: -8px;
-            height: 12px;
+            top: -10px;
+            height: 14px;
             background-image: repeating-linear-gradient(
                 90deg,
-                #5d9c3f 0 10px,
-                #4a8a30 10px 14px,
-                #6aaf45 14px 22px,
-                #3e7a28 22px 26px,
-                #5d9c3f 26px 36px
+                #5a9c42 0 12px,
+                #4a8a30 12px 18px,
+                #6aaf45 18px 28px,
+                #3e7a28 28px 34px,
+                #5a9c42 34px 48px
             );
-            image-rendering: pixelated;
         }
 
-        /* Dirt “block” seams */
-        .ground::after {
+        .land-near::after {
             content: "";
             position: absolute;
-            inset: 18px 0 0 0;
+            inset: 26px 0 0 0;
             background-image:
-                linear-gradient(to right, transparent 0, transparent calc(32px - 1px), rgba(0,0,0,0.12) calc(32px - 1px), rgba(0,0,0,0.12) 32px),
-                linear-gradient(to bottom, transparent 0, transparent calc(32px - 1px), rgba(0,0,0,0.1) calc(32px - 1px), rgba(0,0,0,0.1) 32px);
+                linear-gradient(to right, transparent 0, transparent 31px, rgba(0,0,0,0.14) 31px, rgba(0,0,0,0.14) 32px),
+                linear-gradient(to bottom, transparent 0, transparent 31px, rgba(0,0,0,0.12) 31px, rgba(0,0,0,0.12) 32px);
             background-size: 32px 32px;
-            opacity: 0.9;
         }
 
-        /* Light vignette so content stays readable */
+        /* Near-side trees along bottom (larger) */
+        .land-trees {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 42%;
+            height: 80px;
+            z-index: 2;
+            background-repeat: repeat-x;
+            background-size: 160px 80px;
+            background-position: 20px bottom;
+            image-rendering: pixelated;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='80' shape-rendering='crispEdges'><rect x='28' y='28' width='10' height='52' fill='%235D4037'/><rect x='14' y='8' width='38' height='32' fill='%232e7d32'/><rect x='20' y='0' width='26' height='18' fill='%23388e3c'/><rect x='110' y='36' width='8' height='44' fill='%236D4C41'/><rect x='98' y='14' width='32' height='28' fill='%232e6b32'/></svg>");
+        }
+
+        /* Night / dusk lighting on whole landscape */
+        @keyframes land-light {
+            0%, 100% { filter: brightness(0.75) saturate(1.15) hue-rotate(-8deg); } /* morning purple */
+            16% { filter: brightness(1.05) saturate(1.05) hue-rotate(0deg); }
+            24% { filter: brightness(1.1) saturate(1); }
+            34% { filter: brightness(0.85) saturate(1.2) sepia(0.2) hue-rotate(-25deg); }
+            44% { filter: brightness(0.55) saturate(1.1) sepia(0.35) hue-rotate(-30deg); }
+            54% { filter: brightness(0.28) saturate(0.7) hue-rotate(-40deg); }
+            70% { filter: brightness(0.18) saturate(0.55) hue-rotate(-50deg); }
+            88% { filter: brightness(0.22) saturate(0.65) hue-rotate(-35deg); }
+            95% { filter: brightness(0.5) saturate(1) hue-rotate(-20deg); }
+        }
+
+        @keyframes land-haze {
+            0%, 100% { opacity: 0.7; background: linear-gradient(to bottom, rgba(180, 80, 140, 0.5), transparent); }
+            22% { opacity: 0.35; background: linear-gradient(to bottom, rgba(140, 120, 200, 0.35), transparent); }
+            40% { opacity: 0.8; background: linear-gradient(to bottom, rgba(200, 60, 100, 0.45), transparent); }
+            60% { opacity: 0.55; background: linear-gradient(to bottom, rgba(40, 20, 70, 0.75), transparent); }
+            80% { opacity: 0.6; background: linear-gradient(to bottom, rgba(30, 15, 55, 0.8), transparent); }
+        }
+
         .sky-vignette {
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse 70% 60% at 50% 40%, transparent 30%, rgba(0, 0, 0, 0.25) 100%);
-            z-index: 2;
+            background: radial-gradient(ellipse 75% 65% at 50% 35%, transparent 25%, rgba(20, 5, 35, 0.35) 100%);
+            z-index: 3;
         }
 
         @media (prefers-reduced-motion: reduce) {
             .sky-layer,
             .stars,
-            .celestial-orbit,
+            .sun,
+            .moon,
             .sun-glow,
-            .horizon-silhouette {
+            .land-world,
+            .land-fade {
                 animation: none !important;
             }
-            .sky-day { opacity: 1; }
-            .sky-sunset,
+            .sky-sunset { opacity: 0.85; }
+            .sky-day { opacity: 0.4; }
             .sky-night,
             .stars { opacity: 0; }
-            .celestial-orbit { transform: rotate(-25deg); } /* mid-morning freeze */
+            .sun {
+                left: 28%;
+                top: 22%;
+                opacity: 1;
+            }
+            .moon { opacity: 0; }
+            .land-world { filter: brightness(0.9) saturate(1.1) hue-rotate(-10deg); }
         }
 
         @media (max-width: 600px) {
-            .sun { width: 40px; height: 40px; }
-            .moon { width: 32px; height: 32px; }
-            .horizon { height: 30%; }
+            .sun {
+                width: min(36vw, 140px);
+                height: min(36vw, 140px);
+                margin-left: calc(min(36vw, 140px) / -2);
+                margin-top: calc(min(36vw, 140px) / -2);
+            }
+            .moon {
+                width: min(30vw, 120px);
+                height: min(30vw, 120px);
+                margin-left: calc(min(30vw, 120px) / -2);
+                margin-top: calc(min(30vw, 120px) / -2);
+            }
+            .horizon { height: 42%; min-height: 180px; }
         }
     </style>
 </head>
@@ -499,13 +631,16 @@
         <div class="sky-layer sky-sunset"></div>
         <div class="stars"></div>
         <div class="sun-glow"></div>
-        <div class="celestial-orbit">
-            <div class="sun"></div>
-            <div class="moon"></div>
-        </div>
+        <div class="sun"></div>
+        <div class="moon"></div>
         <div class="horizon">
-            <div class="horizon-silhouette"></div>
-            <div class="ground"></div>
+            <div class="land-world">
+                <div class="land-far-sil"></div>
+                <div class="land-mid"></div>
+                <div class="land-near"></div>
+                <div class="land-trees"></div>
+                <div class="land-fade"></div>
+            </div>
         </div>
         <div class="sky-vignette"></div>
     </div>
