@@ -175,14 +175,25 @@
             height: 20px;
             line-height: 20px;
             text-align: center;
-            transition: all 0.2s;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s, color 0.2s;
             margin: 10px auto;
         }
 
-        /* Address label only — not a link; no hover affordance */
+        /* Address label — looks static (no teal hover), but click copies; still selectable */
+        .server-address-wrap {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 240px;
+            margin: 10px auto;
+        }
+
         .server-address {
-            cursor: default;
-            user-select: all; /* easy copy */
+            cursor: text;
+            user-select: text;
+            -webkit-user-select: text;
+            margin: 0 auto;
+            width: 200px;
         }
 
         .server-address:hover {
@@ -191,6 +202,35 @@
             box-shadow: 2px 2px #000;
             color: #fff;
             text-decoration: none;
+        }
+
+        .server-address.copied-flash {
+            outline: 2px solid #dda0dd;
+            outline-offset: 2px;
+        }
+
+        .copy-toast {
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 6px);
+            transform: translateX(-50%) translateY(4px);
+            padding: 6px 10px;
+            background: #000;
+            border: 2px solid #fff;
+            box-shadow: 2px 2px #ff69b4;
+            color: #ff69b4;
+            font-size: 10px;
+            line-height: 1.2;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            z-index: 5;
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         .server-button:hover, .map-button:hover {
@@ -498,7 +538,18 @@
             <div class="server-box">
                 <div class="server-option">
                     <h3>Java Edition</h3>
-                    <span class="server-address">mizzcord.com</span>
+                    <div class="server-address-wrap">
+                        <span
+                            class="server-address"
+                            id="javaJoinAddress"
+                            data-copy="mizzcord.com"
+                            title="Click to copy · or select and Ctrl+C"
+                            role="button"
+                            tabindex="0"
+                            aria-label="Server address mizzcord.com. Click to copy."
+                        >mizzcord.com</span>
+                        <span class="copy-toast" id="javaCopyToast" aria-live="polite"></span>
+                    </div>
                 </div>
                 <div class="server-option">
                     <h3>Bedrock Edition</h3>
@@ -573,6 +624,78 @@
                     img.style.display = "none";
                 }
             }
+
+            (function () {
+                var el = document.getElementById("javaJoinAddress");
+                var toast = document.getElementById("javaCopyToast");
+                if (!el || !toast) return;
+
+                var downX = 0, downY = 0, hideTimer = null;
+
+                function showCopied() {
+                    toast.textContent = "Copied!";
+                    toast.classList.add("show");
+                    el.classList.add("copied-flash");
+                    if (hideTimer) clearTimeout(hideTimer);
+                    hideTimer = setTimeout(function () {
+                        toast.classList.remove("show");
+                        el.classList.remove("copied-flash");
+                    }, 1400);
+                }
+
+                function copyAddress() {
+                    var text = el.getAttribute("data-copy") || el.textContent.trim();
+                    function done(ok) {
+                        if (ok) showCopied();
+                    }
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(function () { done(true); }).catch(function () {
+                            done(fallbackCopy(text));
+                        });
+                    } else {
+                        done(fallbackCopy(text));
+                    }
+                }
+
+                function fallbackCopy(text) {
+                    try {
+                        var ta = document.createElement("textarea");
+                        ta.value = text;
+                        ta.setAttribute("readonly", "");
+                        ta.style.position = "fixed";
+                        ta.style.left = "-9999px";
+                        document.body.appendChild(ta);
+                        ta.select();
+                        var ok = document.execCommand("copy");
+                        document.body.removeChild(ta);
+                        return ok;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+
+                // Only treat as "click to copy" if it wasn't a drag-select
+                el.addEventListener("mousedown", function (e) {
+                    downX = e.clientX;
+                    downY = e.clientY;
+                });
+
+                el.addEventListener("click", function (e) {
+                    var moved = Math.abs(e.clientX - downX) > 4 || Math.abs(e.clientY - downY) > 4;
+                    var sel = window.getSelection && window.getSelection();
+                    var hasRange = sel && sel.toString && sel.toString().length > 0;
+                    if (moved || hasRange) return; // user is selecting text — leave them alone
+                    e.preventDefault();
+                    copyAddress();
+                });
+
+                el.addEventListener("keydown", function (e) {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        copyAddress();
+                    }
+                });
+            })();
             </script>    
             
             <div class="easy-method">
