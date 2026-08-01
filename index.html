@@ -179,7 +179,21 @@
             margin: 10px auto;
         }
 
-        .server-address:hover, .server-button:hover, .map-button:hover {
+        /* Address label only — not a link; no hover affordance */
+        .server-address {
+            cursor: default;
+            user-select: all; /* easy copy */
+        }
+
+        .server-address:hover {
+            background: #ff00ff;
+            transform: none;
+            box-shadow: 2px 2px #000;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .server-button:hover, .map-button:hover {
             background: #00ffff;
             transform: translate(-2px, -2px);
             box-shadow: 4px 4px #000;
