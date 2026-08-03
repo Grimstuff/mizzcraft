@@ -310,30 +310,30 @@
             text-overflow: ellipsis;
         }
 
-        .mos-titlebar .mos-title span {
-            color: #00ffff;
-        }
-
         .mos-controls {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-shrink: 0;
         }
 
+        /* Windows-style caption buttons (pixel) */
         .mos-btn {
+            position: relative;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 28px;
+            width: 26px;
             height: 22px;
-            padding: 0 6px;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Press Start 2P', cursive;
-            font-size: 9px;
+            font-size: 10px;
             line-height: 1;
-            color: #fff;
-            background: #222;
-            border: 2px solid #000;
-            box-shadow: 2px 2px 0 #000;
+            color: #000;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #fff #000 #000 #fff;
+            box-shadow: none;
             cursor: pointer;
             text-decoration: none;
         }
@@ -344,9 +344,35 @@
             text-decoration: none;
         }
 
+        .mos-btn:active {
+            border-color: #000 #fff #fff #000;
+        }
+
+        /* Maximize: empty square */
+        .mos-btn.mos-max::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border: 2px solid #000;
+            background: transparent;
+            box-sizing: border-box;
+        }
+
+        /* Close: X drawn with lines for crisp pixel look */
+        .mos-btn.mos-close {
+            font-size: 11px;
+            font-weight: normal;
+            color: #000;
+        }
+
         .mos-btn.mos-close:hover {
             background: #ff3366;
             color: #fff;
+        }
+
+        .mos-btn.mos-close:hover::before,
+        .mos-btn.mos-max:hover::before {
+            border-color: #000;
         }
 
         .mos-body {
@@ -385,33 +411,20 @@
             opacity: 0;
         }
 
-        .mos-status {
-            flex-shrink: 0;
-            padding: 5px 10px;
-            font-size: 8px;
-            color: #dda0dd;
-            background: #000;
-            border-top: 2px solid #fff;
-            text-shadow: 1px 1px #000;
-        }
-
-        .mos-status strong {
-            color: #00ffff;
-        }
-
-        /* Resize handle (bottom-right) */
+        /* Resize handle on true window bottom-right corner */
         .mos-resize {
             position: absolute;
             right: 0;
             bottom: 0;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             cursor: nwse-resize;
             background:
-                linear-gradient(135deg, transparent 50%, #ff69b4 50%, #ff69b4 60%, transparent 60%),
-                linear-gradient(135deg, transparent 70%, #00ffff 70%, #00ffff 80%, transparent 80%);
+                linear-gradient(135deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%),
+                linear-gradient(135deg, transparent 65%, #ff69b4 65%, #ff69b4 75%, transparent 75%),
+                linear-gradient(135deg, transparent 85%, #00ffff 85%, #00ffff 95%, transparent 95%);
             touch-action: none;
-            z-index: 2;
+            z-index: 3;
         }
 
         @media (max-width: 600px) {
@@ -751,10 +764,6 @@
             <h2>Server Map</h2>
             <p>Explore our world and discover builds!</p>
             <a href="https://map.mizzcord.com/" class="map-button" id="openMapWindow" role="button">Server Map</a>
-            <p class="center-text" style="font-size:9px;opacity:0.8;margin-top:0.5rem">
-                Opens in <strong>Mizzcraft OS</strong> ·
-                <a href="https://map.mizzcord.com/" target="_blank" rel="noopener">full tab</a>
-            </p>
         </section>
 
 <!--         <section class="donate">
@@ -912,21 +921,20 @@
     </div>
 
     <!-- Mizzcraft OS map window (checkpoint before this: git e2ab223) -->
-    <div class="mos-window" id="mapOsWindow" aria-hidden="true" role="dialog" aria-label="Mizzcraft OS Server Map">
+    <div class="mos-window" id="mapOsWindow" aria-hidden="true" role="dialog" aria-label="Server Map">
         <div class="mos-titlebar" id="mapOsTitlebar">
             <div class="mos-icon" aria-hidden="true"></div>
-            <div class="mos-title">Mizzcraft OS · <span>map.exe</span></div>
+            <div class="mos-title">map.exe</div>
             <div class="mos-controls">
-                <a class="mos-btn" href="https://map.mizzcord.com/" target="_blank" rel="noopener" title="Open full map tab">↗</a>
-                <button type="button" class="mos-btn mos-close" id="mapOsClose" title="Close" aria-label="Close map window">X</button>
+                <a class="mos-btn mos-max" href="https://map.mizzcord.com/" target="_blank" rel="noopener" title="Maximize — open full map" aria-label="Open full map in new tab"></a>
+                <button type="button" class="mos-btn mos-close" id="mapOsClose" title="Close" aria-label="Close map window">×</button>
             </div>
         </div>
         <div class="mos-body">
             <div class="mos-loading" id="mapOsLoading">Loading map tiles…</div>
             <iframe id="mapOsFrame" title="Mizzcraft Server Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            <div class="mos-resize" id="mapOsResize" aria-hidden="true"></div>
         </div>
-        <div class="mos-status">map.mizzcord.com · drag title bar · <strong>X</strong> closes</div>
+        <div class="mos-resize" id="mapOsResize" aria-hidden="true"></div>
     </div>
 
     <script>
