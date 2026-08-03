@@ -248,6 +248,188 @@
             text-decoration: none;
         }
 
+        /* ===== Mizzcraft OS floating map window ===== */
+        .mos-window {
+            position: fixed;
+            z-index: 1000;
+            width: min(920px, calc(100vw - 24px));
+            height: min(620px, calc(100vh - 24px));
+            min-width: 280px;
+            min-height: 220px;
+            display: none;
+            flex-direction: column;
+            background: #1a0a2e;
+            border: 4px solid #fff;
+            box-shadow:
+                6px 6px 0 #000,
+                0 0 0 2px #ff69b4,
+                0 0 24px rgba(255, 0, 255, 0.35);
+            image-rendering: pixelated;
+            overflow: hidden;
+        }
+
+        .mos-window.open {
+            display: flex;
+        }
+
+        .mos-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            padding: 8px 10px;
+            background: linear-gradient(90deg, #ff00ff 0%, #c44b8a 45%, #7b2cbf 100%);
+            border-bottom: 3px solid #000;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .mos-titlebar:active {
+            cursor: grabbing;
+        }
+
+        .mos-titlebar .mos-icon {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            background: #00ffff;
+            border: 2px solid #000;
+            box-shadow: 1px 1px 0 #fff;
+        }
+
+        .mos-titlebar .mos-title {
+            flex: 1;
+            min-width: 0;
+            font-size: 10px;
+            line-height: 1.3;
+            color: #fff;
+            text-shadow: 1px 1px #000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mos-titlebar .mos-title span {
+            color: #00ffff;
+        }
+
+        .mos-controls {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .mos-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 22px;
+            padding: 0 6px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            line-height: 1;
+            color: #fff;
+            background: #222;
+            border: 2px solid #000;
+            box-shadow: 2px 2px 0 #000;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .mos-btn:hover {
+            background: #00ffff;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .mos-btn.mos-close:hover {
+            background: #ff3366;
+            color: #fff;
+        }
+
+        .mos-body {
+            position: relative;
+            flex: 1;
+            min-height: 0;
+            background: #0a0614;
+            border-top: 2px solid #ff69b4;
+        }
+
+        .mos-body iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            background: #111;
+        }
+
+        .mos-loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            text-align: center;
+            font-size: 10px;
+            line-height: 1.6;
+            color: #dda0dd;
+            text-shadow: 1px 1px #000;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .mos-loading.hidden {
+            opacity: 0;
+        }
+
+        .mos-status {
+            flex-shrink: 0;
+            padding: 5px 10px;
+            font-size: 8px;
+            color: #dda0dd;
+            background: #000;
+            border-top: 2px solid #fff;
+            text-shadow: 1px 1px #000;
+        }
+
+        .mos-status strong {
+            color: #00ffff;
+        }
+
+        /* Resize handle (bottom-right) */
+        .mos-resize {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 18px;
+            height: 18px;
+            cursor: nwse-resize;
+            background:
+                linear-gradient(135deg, transparent 50%, #ff69b4 50%, #ff69b4 60%, transparent 60%),
+                linear-gradient(135deg, transparent 70%, #00ffff 70%, #00ffff 80%, transparent 80%);
+            touch-action: none;
+            z-index: 2;
+        }
+
+        @media (max-width: 600px) {
+            .mos-window {
+                width: calc(100vw - 12px);
+                height: min(70vh, 520px);
+                left: 6px !important;
+                top: 10vh !important;
+            }
+            .mos-titlebar .mos-title {
+                font-size: 8px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mos-loading { transition: none; }
+        }
+
         /* ========== Minecraft day / night sky (pure CSS) ========== */
         /* Cycle ~100s; morning + sunset dominate; short true day/night */
         .sky-scene {
@@ -568,7 +750,11 @@
         <section class="server-map">
             <h2>Server Map</h2>
             <p>Explore our world and discover builds!</p>
-            <a href="https://map.mizzcord.com/" class="map-button">Server Map</a>
+            <a href="https://map.mizzcord.com/" class="map-button" id="openMapWindow" role="button">Server Map</a>
+            <p class="center-text" style="font-size:9px;opacity:0.8;margin-top:0.5rem">
+                Opens in <strong>Mizzcraft OS</strong> ·
+                <a href="https://map.mizzcord.com/" target="_blank" rel="noopener">full tab</a>
+            </p>
         </section>
 
 <!--         <section class="donate">
@@ -724,5 +910,134 @@
             <p class="ai-credit">AI Used in Making of This Website</p>
         </footer>
     </div>
+
+    <!-- Mizzcraft OS map window (checkpoint before this: git e2ab223) -->
+    <div class="mos-window" id="mapOsWindow" aria-hidden="true" role="dialog" aria-label="Mizzcraft OS Server Map">
+        <div class="mos-titlebar" id="mapOsTitlebar">
+            <div class="mos-icon" aria-hidden="true"></div>
+            <div class="mos-title">Mizzcraft OS · <span>map.exe</span></div>
+            <div class="mos-controls">
+                <a class="mos-btn" href="https://map.mizzcord.com/" target="_blank" rel="noopener" title="Open full map tab">↗</a>
+                <button type="button" class="mos-btn mos-close" id="mapOsClose" title="Close" aria-label="Close map window">X</button>
+            </div>
+        </div>
+        <div class="mos-body">
+            <div class="mos-loading" id="mapOsLoading">Loading map tiles…</div>
+            <iframe id="mapOsFrame" title="Mizzcraft Server Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="mos-resize" id="mapOsResize" aria-hidden="true"></div>
+        </div>
+        <div class="mos-status">map.mizzcord.com · drag title bar · <strong>X</strong> closes</div>
+    </div>
+
+    <script>
+    (function () {
+        var win = document.getElementById("mapOsWindow");
+        var openBtn = document.getElementById("openMapWindow");
+        var closeBtn = document.getElementById("mapOsClose");
+        var titlebar = document.getElementById("mapOsTitlebar");
+        var frame = document.getElementById("mapOsFrame");
+        var loading = document.getElementById("mapOsLoading");
+        var resizeHandle = document.getElementById("mapOsResize");
+        var MAP_URL = "https://map.mizzcord.com/";
+        var loaded = false;
+
+        if (!win || !openBtn || !closeBtn || !titlebar || !frame) return;
+
+        function centerWindow() {
+            var w = win.offsetWidth || Math.min(920, window.innerWidth - 24);
+            var h = win.offsetHeight || Math.min(620, window.innerHeight - 24);
+            win.style.left = Math.max(8, (window.innerWidth - w) / 2) + "px";
+            win.style.top = Math.max(8, (window.innerHeight - h) / 2) + "px";
+        }
+
+        function openMap(e) {
+            if (e) e.preventDefault();
+            win.classList.add("open");
+            win.setAttribute("aria-hidden", "false");
+            if (!win.style.left) centerWindow();
+            if (!loaded) {
+                loading.classList.remove("hidden");
+                frame.onload = function () { loading.classList.add("hidden"); };
+                frame.src = MAP_URL;
+                loaded = true;
+            }
+            closeBtn.focus();
+        }
+
+        function closeMap() {
+            win.classList.remove("open");
+            win.setAttribute("aria-hidden", "true");
+            // Keep iframe loaded for instant re-open; unload if you prefer less RAM:
+            // frame.src = "about:blank"; loaded = false;
+        }
+
+        openBtn.addEventListener("click", openMap);
+        closeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMap();
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && win.classList.contains("open")) closeMap();
+        });
+
+        // Drag
+        var dragging = false, ox = 0, oy = 0;
+        titlebar.addEventListener("pointerdown", function (e) {
+            if (e.target.closest(".mos-btn")) return;
+            dragging = true;
+            titlebar.setPointerCapture(e.pointerId);
+            var rect = win.getBoundingClientRect();
+            ox = e.clientX - rect.left;
+            oy = e.clientY - rect.top;
+        });
+        titlebar.addEventListener("pointermove", function (e) {
+            if (!dragging) return;
+            var x = e.clientX - ox;
+            var y = e.clientY - oy;
+            var maxX = window.innerWidth - 80;
+            var maxY = window.innerHeight - 40;
+            win.style.left = Math.min(Math.max(-win.offsetWidth + 80, x), maxX) + "px";
+            win.style.top = Math.min(Math.max(0, y), maxY) + "px";
+        });
+        function endDrag(e) {
+            if (!dragging) return;
+            dragging = false;
+            try { titlebar.releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+        titlebar.addEventListener("pointerup", endDrag);
+        titlebar.addEventListener("pointercancel", endDrag);
+
+        // Resize
+        var resizing = false, startW = 0, startH = 0, startX = 0, startY = 0;
+        resizeHandle.addEventListener("pointerdown", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            resizing = true;
+            resizeHandle.setPointerCapture(e.pointerId);
+            startW = win.offsetWidth;
+            startH = win.offsetHeight;
+            startX = e.clientX;
+            startY = e.clientY;
+        });
+        resizeHandle.addEventListener("pointermove", function (e) {
+            if (!resizing) return;
+            var nw = Math.max(280, startW + (e.clientX - startX));
+            var nh = Math.max(220, startH + (e.clientY - startY));
+            nw = Math.min(nw, window.innerWidth - 8);
+            nh = Math.min(nh, window.innerHeight - 8);
+            win.style.width = nw + "px";
+            win.style.height = nh + "px";
+        });
+        function endResize(e) {
+            if (!resizing) return;
+            resizing = false;
+            try { resizeHandle.releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+        resizeHandle.addEventListener("pointerup", endResize);
+        resizeHandle.addEventListener("pointercancel", endResize);
+    })();
+    </script>
 </body>
 </html>
